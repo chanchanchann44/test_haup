@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.my_app_flutter">
+    package="com.example.test_haup">
    <application
-        android:label="my_app_flutter"
+        android:label="test_haup"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
