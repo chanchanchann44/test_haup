@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:test_haup/services/getCategories.dart';
-import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -10,10 +9,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool loadData = false;
+  bool _loadData = false;
   bool _isSearch = false;
   List<String> _list;
-  List searchresult = [];
+  List _searchresult = [];
   final TextEditingController _controller = new TextEditingController();
 
   @override
@@ -25,14 +24,14 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            if(loadData = true){
+            if (_loadData = true) {
               _controller.clear();
               _isSearch = false;
             }
-            loadData = true;
+            _loadData = true;
           });
         },
-        child: (loadData == false)
+        child: (_loadData == false)
             ? Icon(Icons.download_sharp)
             : Icon(Icons.refresh),
       ),
@@ -41,12 +40,13 @@ class _HomePageState extends State<HomePage> {
           children: [
             Expanded(
               child: TextFormField(
+                decoration: InputDecoration(hintText: 'search'),
                 controller: _controller,
                 onChanged: searchList,
               ),
               flex: 1,
             ),
-            (loadData == false)
+            (_loadData == false)
                 ? Expanded(
                     child: Center(child: Text('No Data')),
                     flex: 10,
@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                                     shrinkWrap: true,
                                     itemCount: (_isSearch == false)
                                         ? snapshot.data.length
-                                        : searchresult.length,
+                                        : _searchresult.length,
                                     itemBuilder: (context, index) {
                                       return Container(
                                           height: 40,
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                                               child: Text(
                                             (_isSearch == false)
                                                 ? snapshot.data[index]
-                                                : searchresult[index],
+                                                : _searchresult[index],
                                             style: TextStyle(fontSize: 20),
                                           )));
                                     })
@@ -97,18 +97,18 @@ class _HomePageState extends State<HomePage> {
   void searchList(String searchText) {
     setState(() {
       _isSearch = true;
-      searchresult.clear();
-      print(searchText);
-      for (int i = 0; i < _list.length; i++) {
-        String data = _list[i];
-        if (data.toLowerCase().contains(searchText.toLowerCase())) {
-          searchresult.add(data);
+      _searchresult.clear();
+      if (_list != null) {
+        for (int i = 0; i < _list.length; i++) {
+          String data = _list[i];
+          if (data.toLowerCase().contains(searchText.toLowerCase())) {
+            _searchresult.add(data);
+          }
+        }
+        if (_searchresult.length == 0) {
+          _searchresult.add('No Data');
         }
       }
-      if(searchresult.length==0){
-        searchresult.add('No Data');
-      }
-      print(searchresult);
     });
   }
 }
